@@ -1,0 +1,13 @@
+﻿<Window x:Class="WpfLuckyDraw.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525" DataContext="{Binding}" WindowState="Maximized">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="78*" />
+            <RowDefinition Height="233*" />
+        </Grid.RowDefinitions>
+        <Menu Height="23" HorizontalAlignment="Left" Name="menu1" VerticalAlignment="Top" Width="503" />
+        <Button Content="Button" Grid.Row="1" Height="23" HorizontalAlignment="Left" Margin="140,64,0,0" Name="button1" VerticalAlignment="Top" Width="75" />
+    </Grid>
+</Window>
