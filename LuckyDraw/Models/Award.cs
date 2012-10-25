@@ -7,6 +7,9 @@ namespace LuckyDraw.Models
 {
     public class Award
     {
-
+        public int ID { get; set; }
+        public string AwardType { get; set; }
+        public string AwardName { get; set; }
+        public int AwardNumber { get; set; }
     }
 }

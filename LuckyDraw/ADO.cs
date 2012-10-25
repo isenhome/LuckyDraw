@@ -30,7 +30,7 @@ namespace LuckyDraw
 
         private void InitIDbConnection()
         {
-            string strConnection = "Provider=Microsoft.Jet.OLEDB.4.0;" + @"Data Source=C:\adraw.mdb;" + "User Id=admin;Password=;";
+            string strConnection = "Provider=Microsoft.Jet.OLEDB.4.0;" + @"Data Source=D:\android\workspace\LuckyDraw\adraw.mdb;" + "User Id=admin;Password=;";
             oleConnection = new OleDbConnection(strConnection);
         }
 
@@ -57,6 +57,8 @@ namespace LuckyDraw
                 throw new ADOException() { msg = "关闭数据库连接失败" };
             }
         }
+
+        #region ADO for User
 
         public int DataInsert(User user)
         {
@@ -171,5 +173,68 @@ namespace LuckyDraw
             }
             return user;
         }
+
+        #endregion
+
+        #region ADO for Award
+
+        public List<Award> DataGetAwards(string sql)
+        {
+            List<Award> awards = new List<Award>();
+            ConnectionOpen();
+            OleDbDataAdapter oleDA = new OleDbDataAdapter(sql, oleConnection);
+            DataSet ds = new DataSet();
+            try
+            {
+                oleDA.Fill(ds);
+                foreach (DataRow row in ds.Tables[0].Rows)
+                {
+                    Award award = new Award();
+                    award.ID = Convert.ToInt32(row["ID"]);
+                    award.AwardName = row["AwardName"].ToString();
+                    award.AwardType= row["AwardType"].ToString();
+                    award.AwardNumber = Convert.ToInt32(row["AwardNumber"]);
+                    awards.Add(award);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                new ADOException() { msg = "奖项数据检索失败" };
+            }
+            finally
+            {
+                ConnectionClosed();
+            }
+            return awards;
+        }
+
+        public int DataUpdateAward(Award award)
+        {
+            ConnectionOpen();
+
+            string sql = "update [Award] set ";
+            sql = (award.AwardName == "") ? sql : sql + " AwardName = '" + award.AwardName + "'";
+            sql = (award.AwardType == "") ? sql : sql + ",AwardType = '" + award.AwardType + "'";
+            sql = sql + ",AwardNumber = " + award.AwardNumber;
+            sql = sql + " where ID = " + award.ID;
+            OleDbCommand cmd = new OleDbCommand(sql, oleConnection);
+            int result;
+            try
+            {
+                result = cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new ADOException() { msg = "奖项数据更新失败，不可关闭软件" };
+            }
+            finally
+            {
+                ConnectionClosed();
+            }
+            return result;
+        }
+
+        #endregion
     }
 }

@@ -43,6 +43,9 @@
             this.lbNumber = new DevExpress.XtraEditors.LabelControl();
             this.sbtnStart = new DevExpress.XtraEditors.SimpleButton();
             this.sbtnEnd = new DevExpress.XtraEditors.SimpleButton();
+            this.lbDrawType = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
+            this.lbLuckyDog = new DevExpress.XtraEditors.LabelControl();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -76,50 +79,50 @@
             this.背景图片ToolStripMenuItem,
             this.ToolStripMenuItemFullScreen});
             this.ToolStripMenuItemPanle.Name = "ToolStripMenuItemPanle";
-            this.ToolStripMenuItemPanle.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItemPanle.Size = new System.Drawing.Size(118, 22);
             this.ToolStripMenuItemPanle.Text = "版面设置";
             // 
             // 主标题ToolStripMenuItem
             // 
             this.主标题ToolStripMenuItem.Name = "主标题ToolStripMenuItem";
-            this.主标题ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.主标题ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
             this.主标题ToolStripMenuItem.Text = "主标题";
             // 
             // 副标题ToolStripMenuItem
             // 
             this.副标题ToolStripMenuItem.Name = "副标题ToolStripMenuItem";
-            this.副标题ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.副标题ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
             this.副标题ToolStripMenuItem.Text = "副标题";
             // 
             // 背景图片ToolStripMenuItem
             // 
             this.背景图片ToolStripMenuItem.Name = "背景图片ToolStripMenuItem";
-            this.背景图片ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.背景图片ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
             this.背景图片ToolStripMenuItem.Text = "背景图片";
             // 
             // ToolStripMenuItemFullScreen
             // 
             this.ToolStripMenuItemFullScreen.Name = "ToolStripMenuItemFullScreen";
-            this.ToolStripMenuItemFullScreen.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItemFullScreen.Size = new System.Drawing.Size(118, 22);
             this.ToolStripMenuItemFullScreen.Text = "全屏";
             this.ToolStripMenuItemFullScreen.Click += new System.EventHandler(this.ToolStripMenuItemFullScreen_Click);
             // 
             // ToolStripMenuItemUser
             // 
             this.ToolStripMenuItemUser.Name = "ToolStripMenuItemUser";
-            this.ToolStripMenuItemUser.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItemUser.Size = new System.Drawing.Size(118, 22);
             this.ToolStripMenuItemUser.Text = "人员设置";
             // 
             // ToolStripMenuItemAward
             // 
             this.ToolStripMenuItemAward.Name = "ToolStripMenuItemAward";
-            this.ToolStripMenuItemAward.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItemAward.Size = new System.Drawing.Size(118, 22);
             this.ToolStripMenuItemAward.Text = "奖项设置";
             // 
             // ToolStripMenuItemMusic
             // 
             this.ToolStripMenuItemMusic.Name = "ToolStripMenuItemMusic";
-            this.ToolStripMenuItemMusic.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItemMusic.Size = new System.Drawing.Size(118, 22);
             this.ToolStripMenuItemMusic.Text = "音效";
             // 
             // 说明ToolStripMenuItem
@@ -146,7 +149,7 @@
             this.lbNumber.Appearance.ForeColor = System.Drawing.Color.Yellow;
             this.lbNumber.Appearance.Options.UseFont = true;
             this.lbNumber.Appearance.Options.UseForeColor = true;
-            this.lbNumber.Location = new System.Drawing.Point(475, 274);
+            this.lbNumber.Location = new System.Drawing.Point(496, 208);
             this.lbNumber.Name = "lbNumber";
             this.lbNumber.Size = new System.Drawing.Size(198, 75);
             this.lbNumber.TabIndex = 2;
@@ -170,6 +173,42 @@
             this.sbtnEnd.Text = "结束";
             this.sbtnEnd.Click += new System.EventHandler(this.sbtnEnd_Click);
             // 
+            // lbDrawType
+            // 
+            this.lbDrawType.Appearance.Font = new System.Drawing.Font("华文行楷", 42F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbDrawType.Appearance.ForeColor = System.Drawing.Color.Yellow;
+            this.lbDrawType.Appearance.Options.UseFont = true;
+            this.lbDrawType.Appearance.Options.UseForeColor = true;
+            this.lbDrawType.Location = new System.Drawing.Point(322, 224);
+            this.lbDrawType.Name = "lbDrawType";
+            this.lbDrawType.Size = new System.Drawing.Size(168, 59);
+            this.lbDrawType.TabIndex = 5;
+            this.lbDrawType.Text = "一等奖";
+            // 
+            // labelControl1
+            // 
+            this.labelControl1.Appearance.Font = new System.Drawing.Font("华文行楷", 42F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.labelControl1.Appearance.ForeColor = System.Drawing.Color.Yellow;
+            this.labelControl1.Appearance.Options.UseFont = true;
+            this.labelControl1.Appearance.Options.UseForeColor = true;
+            this.labelControl1.Location = new System.Drawing.Point(260, 354);
+            this.labelControl1.Name = "labelControl1";
+            this.labelControl1.Size = new System.Drawing.Size(336, 59);
+            this.labelControl1.TabIndex = 6;
+            this.labelControl1.Text = "获得者为——";
+            // 
+            // lbLuckyDog
+            // 
+            this.lbLuckyDog.Appearance.Font = new System.Drawing.Font("华文行楷", 42F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbLuckyDog.Appearance.ForeColor = System.Drawing.Color.Yellow;
+            this.lbLuckyDog.Appearance.Options.UseFont = true;
+            this.lbLuckyDog.Appearance.Options.UseForeColor = true;
+            this.lbLuckyDog.Location = new System.Drawing.Point(602, 354);
+            this.lbLuckyDog.Name = "lbLuckyDog";
+            this.lbLuckyDog.Size = new System.Drawing.Size(112, 59);
+            this.lbLuckyDog.TabIndex = 7;
+            this.lbLuckyDog.Text = "张三";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -177,6 +216,9 @@
             this.BackgroundImageLayoutStore = System.Windows.Forms.ImageLayout.Stretch;
             this.BackgroundImageStore = global::LuckyDraw.Properties.Resources.中国结;
             this.ClientSize = new System.Drawing.Size(1161, 687);
+            this.Controls.Add(this.lbLuckyDog);
+            this.Controls.Add(this.labelControl1);
+            this.Controls.Add(this.lbDrawType);
             this.Controls.Add(this.sbtnEnd);
             this.Controls.Add(this.sbtnStart);
             this.Controls.Add(this.lbNumber);
@@ -212,5 +254,8 @@
         private DevExpress.XtraEditors.SimpleButton sbtnStart;
         private DevExpress.XtraEditors.SimpleButton sbtnEnd;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemFullScreen;
+        private DevExpress.XtraEditors.LabelControl lbDrawType;
+        private DevExpress.XtraEditors.LabelControl labelControl1;
+        private DevExpress.XtraEditors.LabelControl lbLuckyDog;
     }
 }

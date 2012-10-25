@@ -11,8 +11,7 @@ using LuckyDraw.Models;
 using LuckyDraw.Exceptions;
 using System.Threading;
 
-
-//timer 可实现
+//timer 可实现同样效果
 
 namespace LuckyDraw
 {
@@ -25,14 +24,58 @@ namespace LuckyDraw
         public static extern IntPtr ShowWindow(IntPtr hWnd, int _value);
 
         private IntPtr hTray;
-        private List<User> allUsers;
+
+        private List<User> _allUsers;
+        public List<User> allUsers
+        {
+            get 
+            { 
+                return _allUsers; 
+            }
+            set
+            {
+                _allUsers = value;
+                if (_allUsers.Count == 0)
+                { 
+                    //new form with congretulate
+                    this.Hide();
+                }
+            }
+        }
+
+        private List<Award> _allAward;
+        public List<Award> allAward
+        {
+            get { return _allAward; }
+            set 
+            {
+                _allAward = value;
+                if (_allAward.Count == 0)
+                {
+                    //new form with congretulate
+                    this.Hide();
+                }
+            }
+        }
+
         private Thread thread;
+        private Award _nowAward;
+
+        public Award nowAward
+        {
+            get {return _nowAward; }
+            set { _nowAward = value; this.lbDrawType.Text = nowAward.AwardType; this.lbDrawType.Refresh(); }
+        }
 
         public MainForm()
         {
+            InitializeComponent();
+            this.Enabled = false;
+
             try
             {
                 allUsers = ADO.GetEntity().DataMultipleSelect("select * from [User] where IsLuckyDog = 0");
+                allAward = ADO.GetEntity().DataGetAwards("select * from Award where AwardNumber <> 0");
             }
             catch (ADOException ex)
             {
@@ -43,9 +86,41 @@ namespace LuckyDraw
             thread.IsBackground = false;
             //获取任务栏
             hTray = MainForm.FindWindowA("Shell_TrayWnd", String.Empty);
-            InitializeComponent();
+            nowAward = allAward[0];
+           // this.lbDrawType.Text = nowAward.AwardType;
             this.Size = new Size(SystemInformation.WorkingArea.Width, SystemInformation.WorkingArea.Height);
             MainForm.CheckForIllegalCrossThreadCalls = false;
+        }
+
+        private void ChangeNowAward()
+        {
+            for (int i = 0; i < allAward.Count; i++)
+            {
+                if (nowAward == allAward[i])
+                {
+                    if (i + 1 == allAward.Count)
+                    {
+                        nowAward = allAward[0];
+                    }
+                    else
+                    {
+                        nowAward = allAward[i + 1];
+                    }
+                    break;
+                }
+            }
+        }
+
+        private void ChangeNowAward(string awardType)
+        {
+            foreach (Award award in allAward)
+            {
+                if (award.AwardType == awardType)
+                {
+                    nowAward = award;
+                    break;
+                }
+            }
         }
 
         public void FullScreen()
@@ -131,16 +206,27 @@ namespace LuckyDraw
             if (thread.ThreadState != ThreadState.Unstarted)
             {
                 thread.Suspend();
+
                 try
                 {
                     tempUser.IsLuckyDog = 1;
-                    tempUser.LuckyDog = "一等奖";
+                    tempUser.LuckyDog = nowAward.AwardType;
                     ADO.GetEntity().DataUpdate(tempUser);
+                    nowAward.AwardNumber--;
+                    ADO.GetEntity().DataUpdateAward(nowAward);
+                    if (nowAward.AwardNumber <= 0)
+                    {
+                        allAward.Remove(nowAward);
+                        nowAward = allAward[0];
+                       // this.lbDrawType.Text = nowAward.AwardType;
+                    }
                 }
                 catch (ADOException ex)
                 {
                     MessageBox.Show(ex.msg);
                 }
+                this.lbLuckyDog.Text = tempUser.UserName;
+
                 allUsers.Remove(tempUser);
             }
         }
@@ -193,9 +279,11 @@ namespace LuckyDraw
         private const int MOD_CONTROL = 0x2; //CTRL
         private const int MOD_SHIFT = 0x4; //SHIFT
         private const int VK_SPACE = 0x20; //SPACE
-        private const int VK_F = 0x46; //SPACE
-        int DrawKey = 33;
+        private const int VK_F = 0x46; //F
+        private const int VK_TAB = 0x09;//TAB
+        int drawKey = 33;
         int fullScreenKey = 34;
+        int changeAwardKey = 35;
 
         /// <summary>
         /// 注册热键
@@ -239,10 +327,10 @@ namespace LuckyDraw
                     switch (m.WParam.ToInt32())
                     {
                         case 32: //热键ID
-                            MessageBox.Show("Hot Key : Ctrl + Alt + Shift + Space");
+                            //MessageBox.Show("Hot Key : Ctrl + Alt + Shift + Space");
                             break;
                         case 33:
-                            if (thread.ThreadState == ThreadState.Unstarted || thread.ThreadState ==ThreadState.Suspended)
+                            if (thread.ThreadState == ThreadState.Unstarted || thread.ThreadState == ThreadState.Suspended)
                             {
                                 startDraw();
                             }
@@ -254,19 +342,24 @@ namespace LuckyDraw
                         case 34:
                             FullScreen();
                             break;
+                        case 35:
+                            ChangeNowAward();
+                            break;
                         default:
                             break;
                     }
                     break;
                 case WM_CREATE: //窗口消息-创建
                     RegKey(Handle, Space, MOD_ALT | MOD_CONTROL | MOD_SHIFT, VK_SPACE); //注册热键
-                    RegKey(Handle, DrawKey,0x0, VK_SPACE); //注册热键
-                    RegKey(Handle, fullScreenKey,MOD_CONTROL, VK_F); //注册热键
+                    RegKey(Handle, drawKey, 0x0, VK_SPACE); //注册热键
+                    RegKey(Handle, fullScreenKey, MOD_CONTROL, VK_F); //注册热键
+                    RegKey(Handle, changeAwardKey,MOD_CONTROL, VK_TAB); //注册热键
                     break;
                 case WM_DESTROY: //窗口消息-销毁
                     UnRegKey(Handle, Space); //销毁热键
-                    UnRegKey(Handle, DrawKey); //销毁热键
+                    UnRegKey(Handle, drawKey); //销毁热键
                     UnRegKey(Handle, fullScreenKey); //销毁热键
+                    UnRegKey(Handle, changeAwardKey); //销毁热键
                     break;
                 default:
                     break;
