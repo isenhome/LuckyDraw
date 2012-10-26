@@ -14,5 +14,6 @@ namespace LuckyDraw.Models
         public string Assigned { get; set; }
         public string LuckyDog { get; set; }
         public int IsLuckyDog { get; set; }
+        public string UserDescribe { get; set; }
     }
 }

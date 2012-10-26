@@ -60,6 +60,20 @@ namespace LuckyDraw.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap button1 {
+            get {
+                object obj = ResourceManager.GetObject("button1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap buttonmy {
+            get {
+                object obj = ResourceManager.GetObject("buttonmy", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap buttons {
             get {
                 object obj = ResourceManager.GetObject("buttons", resourceCulture);

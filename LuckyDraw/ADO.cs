@@ -63,7 +63,7 @@ namespace LuckyDraw
         public int DataInsert(User user)
         {
             ConnectionOpen();
-            string sql = "insert into User(UserID,UserName,UserRole,Assigned,LuckyDog,IsLuckyDog) Values(" + user.UserID + "," + user.UserName + "," + user.UserRole + "," + user.Assigned + "," + user.LuckyDog + "," + user.IsLuckyDog + ")";
+            string sql = "insert into User(UserID,UserName,UserRole,Assigned,LuckyDog,IsLuckyDog,UserDescribe) Values(" + user.UserID + "," + user.UserName + "," + user.UserRole + "," + user.Assigned + "," + user.LuckyDog + "," + user.IsLuckyDog + "," + user.UserDescribe + ")";
             OleDbCommand cmd = new OleDbCommand(sql, oleConnection);
             int result;
             try
@@ -92,6 +92,7 @@ namespace LuckyDraw
             sql = (user.Assigned == "") ? sql : sql + ",Assigned = '" + user.Assigned + "'";
             sql = (user.LuckyDog == "") ? sql : sql + ",LuckyDog = '" + user.LuckyDog + "'";
             sql = (user.IsLuckyDog == 0) ? sql : sql + ",IsLuckyDog = " + user.IsLuckyDog;
+            sql = (user.UserDescribe == "") ? sql : sql + ",UserDescribe = '" + user.UserDescribe + "'";
             sql = sql + " where ID = " + user.ID;
             OleDbCommand cmd = new OleDbCommand(sql, oleConnection);
             int result;
@@ -129,6 +130,7 @@ namespace LuckyDraw
                     user.Assigned = row["Assigned"].ToString();
                     user.LuckyDog = row["LuckyDog"].ToString();
                     user.IsLuckyDog = Convert.ToInt32(row["IsLuckyDog"]);
+                    user.UserDescribe = row["UserDescribe"].ToString();
                     users.Add(user);
                 }
 
@@ -161,6 +163,7 @@ namespace LuckyDraw
                     user.Assigned = reader["Assigned"].ToString();
                     user.LuckyDog = reader["LuckyDog"].ToString();
                     user.IsLuckyDog = Convert.ToInt32(reader["IsLuckyDog"]);
+                    user.UserDescribe = reader["UserDescribe"].ToString();
                 }
             }
             catch (Exception ex)

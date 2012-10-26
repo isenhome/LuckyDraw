@@ -41,11 +41,10 @@
             this.说明ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lbTitle = new DevExpress.XtraEditors.LabelControl();
             this.lbNumber = new DevExpress.XtraEditors.LabelControl();
-            this.sbtnStart = new DevExpress.XtraEditors.SimpleButton();
-            this.sbtnEnd = new DevExpress.XtraEditors.SimpleButton();
             this.lbDrawType = new DevExpress.XtraEditors.LabelControl();
-            this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.lbLuckyDog = new DevExpress.XtraEditors.LabelControl();
+            this.lbcon = new DevExpress.XtraEditors.LabelControl();
+            this.btnStart = new System.Windows.Forms.Button();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -56,7 +55,7 @@
             this.说明ToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(1161, 24);
+            this.menuStrip.Size = new System.Drawing.Size(1192, 24);
             this.menuStrip.TabIndex = 0;
             this.menuStrip.Text = "menuStrip1";
             // 
@@ -137,11 +136,11 @@
             this.lbTitle.Appearance.ForeColor = System.Drawing.Color.Yellow;
             this.lbTitle.Appearance.Options.UseFont = true;
             this.lbTitle.Appearance.Options.UseForeColor = true;
-            this.lbTitle.Location = new System.Drawing.Point(475, 55);
+            this.lbTitle.Location = new System.Drawing.Point(183, 80);
             this.lbTitle.Name = "lbTitle";
-            this.lbTitle.Size = new System.Drawing.Size(160, 59);
+            this.lbTitle.Size = new System.Drawing.Size(840, 59);
             this.lbTitle.TabIndex = 1;
-            this.lbTitle.Text = "xxx公司";
+            this.lbTitle.Text = "二零一二年昆山中创软件公司晚会";
             // 
             // lbNumber
             // 
@@ -149,29 +148,11 @@
             this.lbNumber.Appearance.ForeColor = System.Drawing.Color.Yellow;
             this.lbNumber.Appearance.Options.UseFont = true;
             this.lbNumber.Appearance.Options.UseForeColor = true;
-            this.lbNumber.Location = new System.Drawing.Point(496, 208);
+            this.lbNumber.Location = new System.Drawing.Point(582, 153);
             this.lbNumber.Name = "lbNumber";
             this.lbNumber.Size = new System.Drawing.Size(198, 75);
             this.lbNumber.TabIndex = 2;
             this.lbNumber.Text = "000000";
-            // 
-            // sbtnStart
-            // 
-            this.sbtnStart.Location = new System.Drawing.Point(466, 590);
-            this.sbtnStart.Name = "sbtnStart";
-            this.sbtnStart.Size = new System.Drawing.Size(75, 23);
-            this.sbtnStart.TabIndex = 3;
-            this.sbtnStart.Text = "开始";
-            this.sbtnStart.Click += new System.EventHandler(this.sbtnStart_Click);
-            // 
-            // sbtnEnd
-            // 
-            this.sbtnEnd.Location = new System.Drawing.Point(645, 590);
-            this.sbtnEnd.Name = "sbtnEnd";
-            this.sbtnEnd.Size = new System.Drawing.Size(75, 23);
-            this.sbtnEnd.TabIndex = 4;
-            this.sbtnEnd.Text = "结束";
-            this.sbtnEnd.Click += new System.EventHandler(this.sbtnEnd_Click);
             // 
             // lbDrawType
             // 
@@ -179,23 +160,11 @@
             this.lbDrawType.Appearance.ForeColor = System.Drawing.Color.Yellow;
             this.lbDrawType.Appearance.Options.UseFont = true;
             this.lbDrawType.Appearance.Options.UseForeColor = true;
-            this.lbDrawType.Location = new System.Drawing.Point(322, 224);
+            this.lbDrawType.Location = new System.Drawing.Point(373, 169);
             this.lbDrawType.Name = "lbDrawType";
             this.lbDrawType.Size = new System.Drawing.Size(168, 59);
             this.lbDrawType.TabIndex = 5;
             this.lbDrawType.Text = "一等奖";
-            // 
-            // labelControl1
-            // 
-            this.labelControl1.Appearance.Font = new System.Drawing.Font("华文行楷", 42F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labelControl1.Appearance.ForeColor = System.Drawing.Color.Yellow;
-            this.labelControl1.Appearance.Options.UseFont = true;
-            this.labelControl1.Appearance.Options.UseForeColor = true;
-            this.labelControl1.Location = new System.Drawing.Point(260, 354);
-            this.labelControl1.Name = "labelControl1";
-            this.labelControl1.Size = new System.Drawing.Size(336, 59);
-            this.labelControl1.TabIndex = 6;
-            this.labelControl1.Text = "获得者为——";
             // 
             // lbLuckyDog
             // 
@@ -203,11 +172,43 @@
             this.lbLuckyDog.Appearance.ForeColor = System.Drawing.Color.Yellow;
             this.lbLuckyDog.Appearance.Options.UseFont = true;
             this.lbLuckyDog.Appearance.Options.UseForeColor = true;
-            this.lbLuckyDog.Location = new System.Drawing.Point(602, 354);
+            this.lbLuckyDog.Location = new System.Drawing.Point(270, 286);
             this.lbLuckyDog.Name = "lbLuckyDog";
-            this.lbLuckyDog.Size = new System.Drawing.Size(112, 59);
+            this.lbLuckyDog.Size = new System.Drawing.Size(616, 59);
             this.lbLuckyDog.TabIndex = 7;
-            this.lbLuckyDog.Text = "张三";
+            this.lbLuckyDog.Text = "中创软件——昆山分公司";
+            // 
+            // lbcon
+            // 
+            this.lbcon.Appearance.Font = new System.Drawing.Font("华文行楷", 71.99999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbcon.Appearance.ForeColor = System.Drawing.Color.Yellow;
+            this.lbcon.Appearance.Options.UseFont = true;
+            this.lbcon.Appearance.Options.UseForeColor = true;
+            this.lbcon.Location = new System.Drawing.Point(228, 409);
+            this.lbcon.Name = "lbcon";
+            this.lbcon.Size = new System.Drawing.Size(672, 101);
+            this.lbcon.TabIndex = 8;
+            this.lbcon.Text = "祝大会圆满成功";
+            // 
+            // btnStart
+            // 
+            this.btnStart.BackColor = System.Drawing.Color.Transparent;
+            this.btnStart.BackgroundImage = global::LuckyDraw.Properties.Resources.button1;
+            this.btnStart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnStart.FlatAppearance.BorderSize = 0;
+            this.btnStart.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.btnStart.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.btnStart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnStart.Font = new System.Drawing.Font("楷体_GB2312", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnStart.ForeColor = System.Drawing.Color.Yellow;
+            this.btnStart.Location = new System.Drawing.Point(453, 516);
+            this.btnStart.Name = "btnStart";
+            this.btnStart.Size = new System.Drawing.Size(317, 136);
+            this.btnStart.TabIndex = 9;
+            this.btnStart.Text = "开始";
+            this.btnStart.UseVisualStyleBackColor = true;
+            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
+            this.btnStart.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnStart_MouseUp);
             // 
             // MainForm
             // 
@@ -215,12 +216,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayoutStore = System.Windows.Forms.ImageLayout.Stretch;
             this.BackgroundImageStore = global::LuckyDraw.Properties.Resources.中国结;
-            this.ClientSize = new System.Drawing.Size(1161, 687);
+            this.ClientSize = new System.Drawing.Size(1192, 673);
+            this.Controls.Add(this.btnStart);
+            this.Controls.Add(this.lbcon);
             this.Controls.Add(this.lbLuckyDog);
-            this.Controls.Add(this.labelControl1);
             this.Controls.Add(this.lbDrawType);
-            this.Controls.Add(this.sbtnEnd);
-            this.Controls.Add(this.sbtnStart);
             this.Controls.Add(this.lbNumber);
             this.Controls.Add(this.lbTitle);
             this.Controls.Add(this.menuStrip);
@@ -229,7 +229,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "MainForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
-            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyUp);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.ResumeLayout(false);
@@ -251,11 +250,10 @@
         private System.Windows.Forms.ToolStripMenuItem 背景图片ToolStripMenuItem;
         private DevExpress.XtraEditors.LabelControl lbTitle;
         private DevExpress.XtraEditors.LabelControl lbNumber;
-        private DevExpress.XtraEditors.SimpleButton sbtnStart;
-        private DevExpress.XtraEditors.SimpleButton sbtnEnd;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemFullScreen;
         private DevExpress.XtraEditors.LabelControl lbDrawType;
-        private DevExpress.XtraEditors.LabelControl labelControl1;
         private DevExpress.XtraEditors.LabelControl lbLuckyDog;
+        private DevExpress.XtraEditors.LabelControl lbcon;
+        private System.Windows.Forms.Button btnStart;
     }
 }

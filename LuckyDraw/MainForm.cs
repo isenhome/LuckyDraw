@@ -28,18 +28,13 @@ namespace LuckyDraw
         private List<User> _allUsers;
         public List<User> allUsers
         {
-            get 
-            { 
-                return _allUsers; 
+            get
+            {
+                return _allUsers;
             }
             set
             {
                 _allUsers = value;
-                if (_allUsers.Count == 0)
-                { 
-                    //new form with congretulate
-                    this.Hide();
-                }
             }
         }
 
@@ -47,14 +42,9 @@ namespace LuckyDraw
         public List<Award> allAward
         {
             get { return _allAward; }
-            set 
+            set
             {
                 _allAward = value;
-                if (_allAward.Count == 0)
-                {
-                    //new form with congretulate
-                    this.Hide();
-                }
             }
         }
 
@@ -63,15 +53,15 @@ namespace LuckyDraw
 
         public Award nowAward
         {
-            get {return _nowAward; }
+            get { return _nowAward; }
             set { _nowAward = value; this.lbDrawType.Text = nowAward.AwardType; this.lbDrawType.Refresh(); }
         }
 
         public MainForm()
         {
             InitializeComponent();
-            this.Enabled = false;
-
+            //this.Enabled = false;
+            InitLayout();
             try
             {
                 allUsers = ADO.GetEntity().DataMultipleSelect("select * from [User] where IsLuckyDog = 0");
@@ -86,11 +76,29 @@ namespace LuckyDraw
             thread.IsBackground = false;
             //获取任务栏
             hTray = MainForm.FindWindowA("Shell_TrayWnd", String.Empty);
-            nowAward = allAward[0];
-           // this.lbDrawType.Text = nowAward.AwardType;
+            this.lbcon.Hide();
             this.Size = new Size(SystemInformation.WorkingArea.Width, SystemInformation.WorkingArea.Height);
             MainForm.CheckForIllegalCrossThreadCalls = false;
+            if (allAward.Count > 0)
+            {
+                nowAward = allAward[0];
+            }
+            else
+            {
+                DrawOver();
+            }
         }
+
+        #region Layout
+
+        private void InitLayout()
+        {
+            this.lbTitle.Focus();
+            lbTitle.Location = new Point((this.Width - lbTitle.Width) / 2, 80);
+
+        }
+
+        #endregion
 
         private void ChangeNowAward()
         {
@@ -132,6 +140,7 @@ namespace LuckyDraw
                 this.FormBorderStyle = FormBorderStyle.FixedSingle;
                 this.WindowState = FormWindowState.Normal;
                 this.menuStrip.Show();
+                InitLayout();
             }
             else
             {
@@ -140,40 +149,51 @@ namespace LuckyDraw
                 this.FormBorderStyle = FormBorderStyle.None;
                 this.WindowState = FormWindowState.Maximized;
                 this.menuStrip.Hide();
+                InitLayout();
             }
 
         }
 
-        private void MainForm_KeyUp(object sender, KeyEventArgs e)
+        private void btnStart_Click(object sender, EventArgs e)
         {
-            if (e.Modifiers == Keys.Control)
+            if (this.btnStart.Text == "开始")
             {
-                switch (e.KeyCode)
-                {
-                    case Keys.I:
-                        break;
-                }
+                startDraw();
             }
-            if (e.KeyCode == Keys.F11)
+            else
             {
-                FullScreen();
+                stopDraw();
             }
-        }
 
-        private void sbtnStart_Click(object sender, EventArgs e)
-        {
-            startDraw();
         }
 
         private void startDraw()
         {
             if (thread.ThreadState == ThreadState.Unstarted)
             {
+                this.btnStart.Text = "结束";
                 thread.Start();
+                if (allAward.Count > 0)
+                {
+                    nowAward = allAward[0];
+                }
+                else
+                {
+                    DrawOver();
+                }
             }
             if (thread.ThreadState == ThreadState.Suspended)
             {
+                this.btnStart.Text = "结束";
                 thread.Resume();
+                if (allAward.Count > 0)
+                {
+                    nowAward = allAward[0];
+                }
+                else
+                {
+                    DrawOver();
+                }
             }
         }
 
@@ -196,19 +216,21 @@ namespace LuckyDraw
             }
         }
 
-        private void sbtnEnd_Click(object sender, EventArgs e)
-        {
-            stopDraw();
-        }
-
         private void stopDraw()
         {
             if (thread.ThreadState != ThreadState.Unstarted)
             {
+                this.btnStart.Text = "开始";
                 thread.Suspend();
-
                 try
                 {
+                    foreach (User user in _allUsers)
+                    {
+                        if (user.Assigned == nowAward.AwardType)
+                        {
+                            tempUser = user;
+                        }
+                    }
                     tempUser.IsLuckyDog = 1;
                     tempUser.LuckyDog = nowAward.AwardType;
                     ADO.GetEntity().DataUpdate(tempUser);
@@ -217,18 +239,40 @@ namespace LuckyDraw
                     if (nowAward.AwardNumber <= 0)
                     {
                         allAward.Remove(nowAward);
-                        nowAward = allAward[0];
-                       // this.lbDrawType.Text = nowAward.AwardType;
+                        if (allAward.Count <= 0)
+                        {
+                            DrawOver();
+                        }
                     }
                 }
                 catch (ADOException ex)
                 {
                     MessageBox.Show(ex.msg);
                 }
-                this.lbLuckyDog.Text = tempUser.UserName;
+                this.lbLuckyDog.Text = tempUser.UserDescribe + ":" + tempUser.UserName;
 
                 allUsers.Remove(tempUser);
             }
+        }
+
+        private void DrawOpen()
+        {
+            this.lbDrawType.Show();
+            this.lbLuckyDog.Show();
+            this.lbNumber.Show();
+            this.btnStart.Show();
+            this.lbcon.Hide();
+            RegAllKey();
+        }
+
+        private void DrawOver()
+        {
+            this.lbDrawType.Hide();
+            this.lbLuckyDog.Hide();
+            this.lbNumber.Hide();
+            this.btnStart.Hide();
+            this.lbcon.Show();
+            UnRegAllKey();
         }
 
         /// <summary>
@@ -350,23 +394,38 @@ namespace LuckyDraw
                     }
                     break;
                 case WM_CREATE: //窗口消息-创建
-                    RegKey(Handle, Space, MOD_ALT | MOD_CONTROL | MOD_SHIFT, VK_SPACE); //注册热键
-                    RegKey(Handle, drawKey, 0x0, VK_SPACE); //注册热键
                     RegKey(Handle, fullScreenKey, MOD_CONTROL, VK_F); //注册热键
-                    RegKey(Handle, changeAwardKey,MOD_CONTROL, VK_TAB); //注册热键
+                    RegAllKey();
                     break;
                 case WM_DESTROY: //窗口消息-销毁
-                    UnRegKey(Handle, Space); //销毁热键
-                    UnRegKey(Handle, drawKey); //销毁热键
                     UnRegKey(Handle, fullScreenKey); //销毁热键
-                    UnRegKey(Handle, changeAwardKey); //销毁热键
+                    UnRegAllKey();
                     break;
                 default:
                     break;
             }
         }
 
+        private void RegAllKey()
+        {
+            RegKey(Handle, Space, MOD_ALT | MOD_CONTROL | MOD_SHIFT, VK_SPACE); //注册热键
+            RegKey(Handle, drawKey, 0x0, VK_SPACE); //注册热键
+            RegKey(Handle, changeAwardKey, MOD_CONTROL, VK_TAB); //注册热键
+        }
+
+        private void UnRegAllKey()
+        {
+            UnRegKey(Handle, Space); //销毁热键
+            UnRegKey(Handle, drawKey); //销毁热键
+            UnRegKey(Handle, changeAwardKey); //销毁热键
+        }
+
         #endregion
+
+        private void btnStart_MouseUp(object sender, MouseEventArgs e)
+        {
+            this.lbTitle.Focus();
+        }
 
     }
 
