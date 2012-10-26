@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuckyDraw", "LuckyDraw\LuckyDraw.csproj", "{795C6D16-4285-4393-8597-166548C251FD}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SetupLuckyDraw", "SetupLuckyDraw\SetupLuckyDraw.vdproj", "{46EB6BA8-86A3-4653-8D4C-563FBF45871B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -13,6 +15,8 @@ Global
 		{795C6D16-4285-4393-8597-166548C251FD}.Debug|x86.Build.0 = Debug|x86
 		{795C6D16-4285-4393-8597-166548C251FD}.Release|x86.ActiveCfg = Release|x86
 		{795C6D16-4285-4393-8597-166548C251FD}.Release|x86.Build.0 = Release|x86
+		{46EB6BA8-86A3-4653-8D4C-563FBF45871B}.Debug|x86.ActiveCfg = Debug
+		{46EB6BA8-86A3-4653-8D4C-563FBF45871B}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -30,7 +30,7 @@ namespace LuckyDraw
 
         private void InitIDbConnection()
         {
-            string strConnection = "Provider=Microsoft.Jet.OLEDB.4.0;" + @"Data Source=D:\android\workspace\LuckyDraw\adraw.mdb;" + "User Id=admin;Password=;";
+            string strConnection = "Provider=Microsoft.Jet.OLEDB.4.0;" + "Data Source="+System.AppDomain.CurrentDomain.BaseDirectory+"adraw.mdb;" + "User Id=admin;Password=;";
             oleConnection = new OleDbConnection(strConnection);
         }
 

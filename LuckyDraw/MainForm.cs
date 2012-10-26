@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using LuckyDraw.Models;
 using LuckyDraw.Exceptions;
 using System.Threading;
+using System.Configuration;
 
 //timer 可实现同样效果
 
@@ -24,38 +25,8 @@ namespace LuckyDraw
         public static extern IntPtr ShowWindow(IntPtr hWnd, int _value);
 
         private IntPtr hTray;
-
-        private List<User> _allUsers;
-        public List<User> allUsers
-        {
-            get
-            {
-                return _allUsers;
-            }
-            set
-            {
-                _allUsers = value;
-            }
-        }
-
-        private List<Award> _allAward;
-        public List<Award> allAward
-        {
-            get { return _allAward; }
-            set
-            {
-                _allAward = value;
-            }
-        }
-
         private Thread thread;
-        private Award _nowAward;
-
-        public Award nowAward
-        {
-            get { return _nowAward; }
-            set { _nowAward = value; this.lbDrawType.Text = nowAward.AwardType; this.lbDrawType.Refresh(); }
-        }
+        private User tempUser;
 
         public MainForm()
         {
@@ -89,70 +60,50 @@ namespace LuckyDraw
             }
         }
 
-        #region Layout
 
-        private void InitLayout()
+        #region property
+
+        private List<User> _allUsers;
+        public List<User> allUsers
         {
-            this.lbTitle.Focus();
-            lbTitle.Location = new Point((this.Width - lbTitle.Width) / 2, 80);
+            get
+            {
+                return _allUsers;
+            }
+            set
+            {
+                _allUsers = value;
+            }
+        }
 
+        private List<Award> _allAward;
+        public List<Award> allAward
+        {
+            get { return _allAward; }
+            set
+            {
+                _allAward = value;
+            }
+        }
+
+        private bool _lockDragLabel;
+        public bool lockDragLabel
+        {
+            get { return _lockDragLabel; }
+            set { _lockDragLabel = value; }
+        }
+
+        private Award _nowAward;
+
+        public Award nowAward
+        {
+            get { return _nowAward; }
+            set { _nowAward = value; this.lbDrawType.Text = nowAward.AwardType; this.lbDrawType.Refresh(); }
         }
 
         #endregion
 
-        private void ChangeNowAward()
-        {
-            for (int i = 0; i < allAward.Count; i++)
-            {
-                if (nowAward == allAward[i])
-                {
-                    if (i + 1 == allAward.Count)
-                    {
-                        nowAward = allAward[0];
-                    }
-                    else
-                    {
-                        nowAward = allAward[i + 1];
-                    }
-                    break;
-                }
-            }
-        }
-
-        private void ChangeNowAward(string awardType)
-        {
-            foreach (Award award in allAward)
-            {
-                if (award.AwardType == awardType)
-                {
-                    nowAward = award;
-                    break;
-                }
-            }
-        }
-
-        public void FullScreen()
-        {
-            if (this.FormBorderStyle == FormBorderStyle.None)
-            {
-                //显示任务栏
-                MainForm.ShowWindow(hTray, 5);
-                this.FormBorderStyle = FormBorderStyle.FixedSingle;
-                this.WindowState = FormWindowState.Normal;
-                this.menuStrip.Show();
-                InitLayout();
-            }
-            else
-            {
-                //隐藏任务栏
-                MainForm.ShowWindow(hTray, 0);
-                this.FormBorderStyle = FormBorderStyle.None;
-                this.WindowState = FormWindowState.Maximized;
-                this.menuStrip.Hide();
-                InitLayout();
-            }
-
-        }
+        #region events
 
         private void btnStart_Click(object sender, EventArgs e)
         {
@@ -167,138 +118,6 @@ namespace LuckyDraw
 
         }
 
-        private void startDraw()
-        {
-            if (thread.ThreadState == ThreadState.Unstarted)
-            {
-                this.btnStart.Text = "结束";
-                thread.Start();
-                if (allAward.Count > 0)
-                {
-                    nowAward = allAward[0];
-                }
-                else
-                {
-                    DrawOver();
-                }
-            }
-            if (thread.ThreadState == ThreadState.Suspended)
-            {
-                this.btnStart.Text = "结束";
-                thread.Resume();
-                if (allAward.Count > 0)
-                {
-                    nowAward = allAward[0];
-                }
-                else
-                {
-                    DrawOver();
-                }
-            }
-        }
-
-        private User tempUser;
-        private void ChangeNumberLable()
-        {
-            allUsers = RandomSort(allUsers);
-            int i = allUsers.Count - 1;
-            while (true)
-            {
-                tempUser = allUsers[i];
-                lbNumber.Text = tempUser.UserID;
-                lbNumber.Refresh();
-                Thread.Sleep(30);
-                i--;
-                if (i < 0)
-                {
-                    i = allUsers.Count - 1;
-                }
-            }
-        }
-
-        private void stopDraw()
-        {
-            if (thread.ThreadState != ThreadState.Unstarted)
-            {
-                this.btnStart.Text = "开始";
-                thread.Suspend();
-                try
-                {
-                    foreach (User user in _allUsers)
-                    {
-                        if (user.Assigned == nowAward.AwardType)
-                        {
-                            tempUser = user;
-                        }
-                    }
-                    tempUser.IsLuckyDog = 1;
-                    tempUser.LuckyDog = nowAward.AwardType;
-                    ADO.GetEntity().DataUpdate(tempUser);
-                    nowAward.AwardNumber--;
-                    ADO.GetEntity().DataUpdateAward(nowAward);
-                    if (nowAward.AwardNumber <= 0)
-                    {
-                        allAward.Remove(nowAward);
-                        if (allAward.Count <= 0)
-                        {
-                            DrawOver();
-                        }
-                    }
-                }
-                catch (ADOException ex)
-                {
-                    MessageBox.Show(ex.msg);
-                }
-                this.lbLuckyDog.Text = tempUser.UserDescribe + ":" + tempUser.UserName;
-
-                allUsers.Remove(tempUser);
-            }
-        }
-
-        private void DrawOpen()
-        {
-            this.lbDrawType.Show();
-            this.lbLuckyDog.Show();
-            this.lbNumber.Show();
-            this.btnStart.Show();
-            this.lbcon.Hide();
-            RegAllKey();
-        }
-
-        private void DrawOver()
-        {
-            this.lbDrawType.Hide();
-            this.lbLuckyDog.Hide();
-            this.lbNumber.Hide();
-            this.btnStart.Hide();
-            this.lbcon.Show();
-            UnRegAllKey();
-        }
-
-        /// <summary>
-        /// 数组打乱顺序（返回arraylist)
-        /// </summary>
-        ///   
-        public List<User> RandomSort(List<User> array)
-        {
-            int len = array.Count;
-            System.Collections.Generic.List<int> list = new System.Collections.Generic.List<int>();
-            List<User> newlist = new List<User>();
-            Random rand = new Random();
-            int i = 0;
-            while (list.Count < len)
-            {
-                int iter = rand.Next(0, len);
-                if (!list.Contains(iter))
-                {
-                    list.Add(iter);
-                    newlist.Add(array[iter]);
-                    i++;
-                }
-            }
-            return newlist;
-        }
-
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             System.Environment.Exit(0);
@@ -308,6 +127,41 @@ namespace LuckyDraw
         {
             FullScreen();
         }
+
+        private void btnStart_MouseUp(object sender, MouseEventArgs e)
+        {
+            this.lbTitle.Focus();
+        }
+
+        private void MainForm_SizeChanged(object sender, EventArgs e)
+        {
+            this.btnStart.Location = new Point((this.Width - this.btnStart.Width) / 2, this.Height - this.btnStart.Height - 80);
+            this.lbTitle.Location = GetLabelLocation(lbTitle.Name);
+            this.lbNumber.Location = GetLabelLocation(lbNumber.Name);
+            this.lbLuckyDog.Location = GetLabelLocation(lbLuckyDog.Name);
+            this.lbDrawType.Location = GetLabelLocation(lbDrawType.Name);
+            this.lbcon.Location = GetLabelLocation(lbcon.Name);
+        }
+
+        #endregion
+
+        #region Layout
+
+        private void InitLayout()
+        {
+            ChangeDragLalel();
+        }
+
+        private void ChangeDragLalel()
+        {
+            this.lbTitle.dragFlag = _lockDragLabel;
+            this.lbNumber.dragFlag = _lockDragLabel;
+            this.lbLuckyDog.dragFlag = _lockDragLabel;
+            this.lbDrawType.dragFlag = _lockDragLabel;
+            this.lbcon.dragFlag = _lockDragLabel;
+        }
+
+        #endregion
 
         #region register hotkeys
 
@@ -325,9 +179,11 @@ namespace LuckyDraw
         private const int VK_SPACE = 0x20; //SPACE
         private const int VK_F = 0x46; //F
         private const int VK_TAB = 0x09;//TAB
+        private const int VK_L = 0x4c;//L
         int drawKey = 33;
         int fullScreenKey = 34;
         int changeAwardKey = 35;
+        int lockDragLabelKey = 36;
 
         /// <summary>
         /// 注册热键
@@ -389,6 +245,10 @@ namespace LuckyDraw
                         case 35:
                             ChangeNowAward();
                             break;
+                        case 36:
+                            _lockDragLabel = !_lockDragLabel;
+                            ChangeDragLalel();
+                            break;
                         default:
                             break;
                     }
@@ -411,6 +271,7 @@ namespace LuckyDraw
             RegKey(Handle, Space, MOD_ALT | MOD_CONTROL | MOD_SHIFT, VK_SPACE); //注册热键
             RegKey(Handle, drawKey, 0x0, VK_SPACE); //注册热键
             RegKey(Handle, changeAwardKey, MOD_CONTROL, VK_TAB); //注册热键
+            RegKey(Handle, lockDragLabelKey, MOD_CONTROL, VK_L); //注册热键
         }
 
         private void UnRegAllKey()
@@ -418,14 +279,206 @@ namespace LuckyDraw
             UnRegKey(Handle, Space); //销毁热键
             UnRegKey(Handle, drawKey); //销毁热键
             UnRegKey(Handle, changeAwardKey); //销毁热键
+            UnRegKey(Handle, lockDragLabelKey); //销毁热键
         }
 
         #endregion
 
-        private void btnStart_MouseUp(object sender, MouseEventArgs e)
+        #region Common methods
+
+        private void ChangeNowAward()
         {
-            this.lbTitle.Focus();
+            for (int i = 0; i < allAward.Count; i++)
+            {
+                if (nowAward == allAward[i])
+                {
+                    if (i + 1 == allAward.Count)
+                    {
+                        nowAward = allAward[0];
+                    }
+                    else
+                    {
+                        nowAward = allAward[i + 1];
+                    }
+                    break;
+                }
+            }
         }
+
+        private void ChangeNowAward(string awardType)
+        {
+            foreach (Award award in allAward)
+            {
+                if (award.AwardType == awardType)
+                {
+                    nowAward = award;
+                    break;
+                }
+            }
+        }
+
+        public void FullScreen()
+        {
+            if (this.FormBorderStyle == FormBorderStyle.None)
+            {
+                //显示任务栏
+                MainForm.ShowWindow(hTray, 5);
+                this.FormBorderStyle = FormBorderStyle.FixedSingle;
+                this.WindowState = FormWindowState.Normal;
+                this.menuStrip.Show();
+                InitLayout();
+            }
+            else
+            {
+                //隐藏任务栏
+                MainForm.ShowWindow(hTray, 0);
+                this.FormBorderStyle = FormBorderStyle.None;
+                this.WindowState = FormWindowState.Maximized;
+                this.menuStrip.Hide();
+                InitLayout();
+            }
+
+        }
+
+        private void startDraw()
+        {
+            if (thread.ThreadState == ThreadState.Unstarted)
+            {
+                this.btnStart.Text = "结束";
+                thread.Start();
+                if (allAward.Count > 0)
+                {
+                    nowAward = allAward[0];
+                }
+                else
+                {
+                    DrawOver();
+                }
+            }
+            if (thread.ThreadState == ThreadState.Suspended)
+            {
+                this.btnStart.Text = "结束";
+                thread.Resume();
+                if (allAward.Count > 0)
+                {
+                    nowAward = allAward[0];
+                }
+                else
+                {
+                    DrawOver();
+                }
+            }
+        }
+
+        private void ChangeNumberLable()
+        {
+            allUsers = RandomSort(allUsers);
+            int i = allUsers.Count - 1;
+            while (true)
+            {
+                tempUser = allUsers[i];
+                lbNumber.Text = tempUser.UserID;
+                lbNumber.Refresh();
+                Thread.Sleep(30);
+                i--;
+                if (i < 0)
+                {
+                    i = allUsers.Count - 1;
+                }
+            }
+        }
+
+        private void stopDraw()
+        {
+            if (thread.ThreadState != ThreadState.Unstarted)
+            {
+                this.btnStart.Text = "开始";
+                thread.Suspend();
+                try
+                {
+                    foreach (User user in _allUsers)
+                    {
+                        if (user.Assigned == nowAward.AwardType)
+                        {
+                            tempUser = user;
+                        }
+                    }
+                    tempUser.IsLuckyDog = 1;
+                    tempUser.LuckyDog = nowAward.AwardType;
+                    ADO.GetEntity().DataUpdate(tempUser);
+                    nowAward.AwardNumber--;
+                    ADO.GetEntity().DataUpdateAward(nowAward);
+                    if (nowAward.AwardNumber <= 0)
+                    {
+                        allAward.Remove(nowAward);
+                        if (allAward.Count <= 0)
+                        {
+                            DrawOver();
+                        }
+                    }
+                }
+                catch (ADOException ex)
+                {
+                    MessageBox.Show(ex.msg);
+                }
+                this.lbLuckyDog.Text = tempUser.UserDescribe + "——" + tempUser.UserName;
+
+                allUsers.Remove(tempUser);
+            }
+        }
+
+        private void DrawOpen()
+        {
+            this.lbDrawType.Show();
+            this.lbLuckyDog.Show();
+            this.lbNumber.Show();
+            this.btnStart.Show();
+            this.lbcon.Hide();
+            RegAllKey();
+        }
+
+        private void DrawOver()
+        {
+            this.lbDrawType.Hide();
+            this.lbLuckyDog.Hide();
+            this.lbNumber.Hide();
+            this.btnStart.Hide();
+            this.lbcon.Show();
+            UnRegAllKey();
+        }
+
+        /// <summary>
+        /// 数组打乱顺序（返回arraylist)
+        /// </summary>
+        ///   
+        public List<User> RandomSort(List<User> array)
+        {
+            int len = array.Count;
+            System.Collections.Generic.List<int> list = new System.Collections.Generic.List<int>();
+            List<User> newlist = new List<User>();
+            Random rand = new Random();
+            int i = 0;
+            while (list.Count < len)
+            {
+                int iter = rand.Next(0, len);
+                if (!list.Contains(iter))
+                {
+                    list.Add(iter);
+                    newlist.Add(array[iter]);
+                    i++;
+                }
+            }
+            return newlist;
+        }
+
+        private Point GetLabelLocation(string name)
+        {
+            string location = ConfigurationManager.AppSettings[name + ".Location"].ToString();
+            string[] array = location.Split(new char[1] { ',' });
+            return new Point(Convert.ToInt32(array[0]), Convert.ToInt32(array[1]));
+        }
+
+        #endregion
 
     }
 

@@ -39,11 +39,11 @@
             this.ToolStripMenuItemAward = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemMusic = new System.Windows.Forms.ToolStripMenuItem();
             this.说明ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.lbTitle = new DevExpress.XtraEditors.LabelControl();
-            this.lbNumber = new DevExpress.XtraEditors.LabelControl();
-            this.lbDrawType = new DevExpress.XtraEditors.LabelControl();
-            this.lbLuckyDog = new DevExpress.XtraEditors.LabelControl();
-            this.lbcon = new DevExpress.XtraEditors.LabelControl();
+            this.lbTitle = new LuckyDraw.DrawLabel();
+            this.lbNumber = new LuckyDraw.DrawLabel();
+            this.lbDrawType = new LuckyDraw.DrawLabel();
+            this.lbLuckyDog = new LuckyDraw.DrawLabel();
+            this.lbcon = new LuckyDraw.DrawLabel();
             this.btnStart = new System.Windows.Forms.Button();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -136,6 +136,7 @@
             this.lbTitle.Appearance.ForeColor = System.Drawing.Color.Yellow;
             this.lbTitle.Appearance.Options.UseFont = true;
             this.lbTitle.Appearance.Options.UseForeColor = true;
+            this.lbTitle.dragFlag = false;
             this.lbTitle.Location = new System.Drawing.Point(183, 80);
             this.lbTitle.Name = "lbTitle";
             this.lbTitle.Size = new System.Drawing.Size(840, 59);
@@ -148,6 +149,7 @@
             this.lbNumber.Appearance.ForeColor = System.Drawing.Color.Yellow;
             this.lbNumber.Appearance.Options.UseFont = true;
             this.lbNumber.Appearance.Options.UseForeColor = true;
+            this.lbNumber.dragFlag = false;
             this.lbNumber.Location = new System.Drawing.Point(582, 153);
             this.lbNumber.Name = "lbNumber";
             this.lbNumber.Size = new System.Drawing.Size(198, 75);
@@ -160,6 +162,7 @@
             this.lbDrawType.Appearance.ForeColor = System.Drawing.Color.Yellow;
             this.lbDrawType.Appearance.Options.UseFont = true;
             this.lbDrawType.Appearance.Options.UseForeColor = true;
+            this.lbDrawType.dragFlag = false;
             this.lbDrawType.Location = new System.Drawing.Point(373, 169);
             this.lbDrawType.Name = "lbDrawType";
             this.lbDrawType.Size = new System.Drawing.Size(168, 59);
@@ -172,6 +175,7 @@
             this.lbLuckyDog.Appearance.ForeColor = System.Drawing.Color.Yellow;
             this.lbLuckyDog.Appearance.Options.UseFont = true;
             this.lbLuckyDog.Appearance.Options.UseForeColor = true;
+            this.lbLuckyDog.dragFlag = false;
             this.lbLuckyDog.Location = new System.Drawing.Point(270, 286);
             this.lbLuckyDog.Name = "lbLuckyDog";
             this.lbLuckyDog.Size = new System.Drawing.Size(616, 59);
@@ -184,6 +188,7 @@
             this.lbcon.Appearance.ForeColor = System.Drawing.Color.Yellow;
             this.lbcon.Appearance.Options.UseFont = true;
             this.lbcon.Appearance.Options.UseForeColor = true;
+            this.lbcon.dragFlag = false;
             this.lbcon.Location = new System.Drawing.Point(228, 409);
             this.lbcon.Name = "lbcon";
             this.lbcon.Size = new System.Drawing.Size(672, 101);
@@ -229,6 +234,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "MainForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+            this.SizeChanged += new System.EventHandler(this.MainForm_SizeChanged);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.ResumeLayout(false);
@@ -248,12 +254,12 @@
         private System.Windows.Forms.ToolStripMenuItem 主标题ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 副标题ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 背景图片ToolStripMenuItem;
-        private DevExpress.XtraEditors.LabelControl lbTitle;
-        private DevExpress.XtraEditors.LabelControl lbNumber;
+        private DrawLabel lbTitle;
+        private DrawLabel lbNumber;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemFullScreen;
-        private DevExpress.XtraEditors.LabelControl lbDrawType;
-        private DevExpress.XtraEditors.LabelControl lbLuckyDog;
-        private DevExpress.XtraEditors.LabelControl lbcon;
+        private DrawLabel lbDrawType;
+        private DrawLabel lbLuckyDog;
+        private DrawLabel lbcon;
         private System.Windows.Forms.Button btnStart;
     }
 }
